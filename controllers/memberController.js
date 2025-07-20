@@ -32,8 +32,8 @@ memberController.login = async (req, res) => {
     console.log("POST: cont/login");
     const data = req.body;
     // console.log("body:::", req.body);
-    member = new Member();
-    result = await member.loginData(data);
+    const member = new Member();
+    const result = await member.loginData(data);
 
     // token hosil qilinyabdi
     const token = memberController.createToken(result);

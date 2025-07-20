@@ -4,7 +4,7 @@ dotenv.config();
 const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", true);
-const connectionString = process.env.MONGO_URL;
+const connectionString = process.env.MONGO_URL_HOME;
 
 mongoose.connect(connectionString, {
     useNewUrlParser: true,
@@ -12,7 +12,10 @@ mongoose.connect(connectionString, {
 
 
 }, (err, goose) => {
-    if(err) console.log("ERROR on connection MongoDB")
+    if(err) {
+        console.log("ERROR on connection MongoDB")
+           console.log(err);
+    }
     else {
         console.log("MongoDB connection succeed");
         // console.log(goose);  
