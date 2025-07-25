@@ -85,7 +85,6 @@ class Like {
 
       return result;
     } catch (err) {
-        console.log("err:::", err);
       throw new Error(Definer.mongo_validation_err1);
     }
   }

@@ -16,9 +16,7 @@ class Community {
   async createArticleData(member, data) {
     try {
       data.mb_id = shapeIntoMongooseObjectId(member?._id);
-      // console.log("data.mb_id:::", data.mb_id)
       const new_article = await this.saveArticleData(data);
-      console.log("new_article :::", new_article);
       return new_article;
     } catch (err) {
       throw err;
@@ -30,7 +28,6 @@ class Community {
       const article = new this.boArticleModel(data);
       return await article.save();
     } catch (mongo_err) {
-      console.log(mongo_err);
       throw new Error(Definer.mongo_validation_err1);
     }
   }
@@ -100,7 +97,6 @@ class Community {
           lookup_auth_member_liked(auth_mb_id), //checking liked//
         ])
         .exec();
-      // console.log("result:::", result);
       assert.ok(result, Definer.article_err3);
 
       return result;
@@ -113,7 +109,6 @@ class Community {
     try {
       art_id = shapeIntoMongooseObjectId(art_id);
 
-      // increase art_views when user has not seem before
       if (member) {
         const member_obj = new Member();
         await member_obj.viewChosenItemByMember(member, art_id, "community");

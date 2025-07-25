@@ -25,10 +25,8 @@ class Member {
       try {
         result = await new_member.save();
       } catch (mango_err) {
-        console.log(mongo_err);
         throw new Error(Definer.mongo_validation_err1);
       }
-      //   console.log(result);
       result.mb_password = "";
       return result;
     } catch (err) {
@@ -60,7 +58,6 @@ class Member {
     try {
       const auth_member = shapeIntoMongooseObjectId(member?._id);
       id = shapeIntoMongooseObjectId(id);
-      console.log("member:::", member);
 
       let aggregateQuery = [
         { $match: { _id: id, mb_status: "ACTIVE" } },
@@ -68,10 +65,8 @@ class Member {
       ];
 
       if (member) {
-        // condition if not seem before
         await this.viewChosenItemByMember(member, id, "member");
 
-        //  check auth member liked the chosen target
         aggregateQuery.push(lookup_auth_member_liked(auth_member));
 
         aggregateQuery.push(
@@ -95,12 +90,9 @@ class Member {
 
       const view = new View(mb_id);
       const isValid = await view.validateChosenTarget(view_ref_id, group_type);
-      console.log("isValid:::", isValid);
       assert.ok(isValid, Definer.general_err2);
 
-      // logged user has seen target before
       const doesExist = await view.checkViewExistance(view_ref_id);
-      console.log("doesExist:", doesExist);
 
       if (!doesExist) {
         const result = await view.insertMemberView(view_ref_id, group_type);
@@ -119,12 +111,10 @@ class Member {
 
       const like = new Like(mb_id);
       const isValid = await like.validateTargetItem(like_ref_id, group_type);
-      // console.log("isValid:::", isValid);
       assert.ok(isValid, Definer.general_err2);
 
       // doesExist
       const doesExist = await like.checkLikeExistence(like_ref_id);
-      console.log("doesExist:::", doesExist);
 
       let data = doesExist
         ? await like.removeMemberLike(like_ref_id, group_type)

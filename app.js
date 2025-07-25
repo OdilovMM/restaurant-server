@@ -1,4 +1,3 @@
-console.log("Web Serverni boshlash");
 const http = require("http");
 const express = require("express");
 const app = express();
@@ -16,11 +15,7 @@ const store =  new MongoDBStore({
 });
 
 
-// MongoDB chaqirish
-// const db = require("./server").db();
-// const mongodb = require("mongodb");
 
-// 1 Kirish code lar
 app.use(express.static("public"));
 app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use(express.json());
@@ -34,7 +29,6 @@ app.use(
 })
 );
 
-// 2: session code 
 app.use(
     session({
         secret: process.env.SESSION_SECRET,
@@ -52,7 +46,6 @@ app.use(
  });
 
  
-// 3 views code
 app.set("views", "views");
 app.set("view engine", "ejs");  
  
@@ -72,25 +65,18 @@ const io = require("socket.io")(server, {
   let online_users = 0;
   io.on("connection", function (socket) {
     online_users++;
-    console.log("New user, total:", online_users);
     socket.emit("greetMsg", { text: "Welcome" });
     io.emit("infoMsg", { total: online_users });
   
     socket.on("disconnect", function () {
       online_users--;
       socket.broadcast.emit("infoMsg", { total: online_users });
-      console.log("Client disconnected, total:", online_users);
     });
   
     socket.on("createMsg", function (data) {
-      console.log("createMsg:", data);
       io.emit("newMsg", data);
     });
   
-    // socket.emit(); => only new added user get first message
-    // socket.broadcast.emit(); => beside of new added user other users get message
-    // io.emit(); => all users
   });
   
-  /** Socket.io backend server */
 module.exports = server;        

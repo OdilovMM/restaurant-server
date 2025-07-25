@@ -7,13 +7,10 @@ const { json } = require("express");
 
 memberController.signup = async (req, res) => {
   try {
-    console.log("POST: cont/signup");
     const data = req.body;
-    console.log("body:::", req.body);
     const member = new Member(),
       new_member = await member.signupData(data);
 
-    // token hosil qilinyabdi
     const token = memberController.createToken(new_member);
     res.cookie("access_token", token, {
       maxAge: 6 * 3600 * 1000,
@@ -22,20 +19,16 @@ memberController.signup = async (req, res) => {
 
     res.json({ state: "success", data: new_member });
   } catch (err) {
-    console.log(`ERROR, cont/signup, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };
 
 memberController.login = async (req, res) => {
   try {
-    console.log("POST: cont/login");
     const data = req.body;
-    // console.log("body:::", req.body);
     const member = new Member();
     const result = await member.loginData(data);
 
-    // token hosil qilinyabdi
     const token = memberController.createToken(result);
     res.cookie("access_token", token, {
       maxAge: 6 * 3600 * 1000,
@@ -44,13 +37,11 @@ memberController.login = async (req, res) => {
 
     res.json({ state: "success", data: result });
   } catch (err) {
-    console.log(`ERROR, cont/login, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };
 
 memberController.logout = (req, res) => {
-  console.log("GET: cont/logout");
   res.cookie("access_token", null, { maxAge: 0, httpOnly: true });
   res.json({ state: "success", data: "logout successfully!" });
 };
@@ -76,9 +67,7 @@ memberController.createToken = (result) => {
 
 memberController.checkMyAuthentication = (req, res) => {
   try {
-    console.log("GET: cont/checkMyAuthentication");
     let token = req.cookies["access_token"];
-    // console.log("token:::", token);
 
     const member = token ? jwt.verify(token, process.env.SECRET_TOKEN) : null;
     assert.ok(member, Definer.auth_err2);
@@ -91,21 +80,18 @@ memberController.checkMyAuthentication = (req, res) => {
 
 memberController.getChosenMember = async (req, res) => {
   try {
-    console.log("GET: cont/getChosenMember");
     const id = req.params.id;
 
     const member = new Member();
     const result = await member.getChosenMemberData(req.member, id);
     res.json({ state: "success", data: result });
   } catch (err) {
-    console.log(`ERROR, cont/getChosenMember, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };
 
 memberController.likeMemberChosen = async (req, res) => {
   try {
-    console.log("POST: cont/likeMemberChosen");
     assert.ok(req.member, Definer.auth_err5);
 
     const member = new Member(),
@@ -120,22 +106,18 @@ memberController.likeMemberChosen = async (req, res) => {
 
     res.json({ state: "success", data: result });
   } catch (err) {
-    console.log(`ERROR, cont/likeMemberChosen, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };
 
 memberController.updateMember = async (req, res) => {
   try {
-    console.log("POST: cont/updateMember");
     assert.ok(req.member, Definer.auth_err3);
     
     const member = new Member();
     const result = await member.updateMemberData(req.member?._id, req.body, req.file);
-    console.log("result:::", result);
     res.json({ state: "success", data: result });
   } catch (err) {
-    console.log(`ERROR, cont/updateMember, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };
@@ -146,7 +128,6 @@ memberController.retrieveAuthMember = (req, res, next) => {
     req.member = token ? jwt.verify(token, process.env.SECRET_TOKEN) : null;
     next();
   } catch (err) {
-    console.log(`ERROR, cont/retrieveAuthMember, ${err.message}`);
     next();
   }
 };

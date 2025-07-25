@@ -3,7 +3,6 @@ const { shapeIntoMongooseObjectId } = require("../lib/config");
 const Definer = require("../lib/mistake");
 const OrderModel = require("../schema/order.model");
 const OrderItemModel = require("../schema/order_item.model");
-const memberModel = require("../schema/member.model");
 
 class Order {
   constructor() {
@@ -30,9 +29,7 @@ class Order {
         delivery_cost,
         mb_id
       );
-      console.log("order_id:::", order_id);
 
-      // order items creation
       await this.recordOrderItemsData(order_id, data);
 
       return order_id;
@@ -50,11 +47,9 @@ class Order {
       });
       const result = await new_order.save();
       assert.ok(result, Definer.order_err1);
-      console.log("result:::", result);
 
       return result._id;
     } catch (err) {
-      console.log(err);
       throw new Error(Definer.order_err1);
     }
   }
@@ -65,7 +60,6 @@ class Order {
         return await this.saveItemsOrderData(item, order_id);
       });
       const results = await Promise.all(pro_list);
-      console.log("results:::", results);
       return true;
     } catch (err) {
       throw err;
@@ -121,7 +115,6 @@ class Order {
         ])
         .exec();
 
-      console.log("result::", result);
       assert.ok(result, Definer.order_err1);
 
       return result;
@@ -141,7 +134,6 @@ class Order {
         { order_status: order_status },
         { runValidators: true, lean: true, returnDocument: "after" }
       );
-      console.log(result);
 
       assert.ok(result, Definer.order_err3);
       return result;

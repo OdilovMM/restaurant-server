@@ -158,7 +158,6 @@
     <script>
          $(function() {
                  
-                // maxsulot turi drink bolganda valumge o'zgaradi//
                 $(".product_collection").on("change", ()=>{
                     const selected = $(".product_collection").val();
                     if(selected === "drink"){
@@ -170,13 +169,11 @@
                     }
                 });
 
-                // yangi taomni bosganda tableni show qilishi//
                 $(".hiding_btn").on('click', ()=>{
                     $(".dish_container").slideToggle(500);
                     $(".hiding_btn").css("display", "none");
                 });
 
-                //product status changer yani proccess or paused qilish uchun//
                 $(".new_product_status").on("change", async function(e) {
                     const id = e.target.id;
                     const product_status = $(`#${id}.new_product_status`).val();
@@ -186,10 +183,6 @@
                         const response= await axios.post(url, 
                         {id: id, product_status: product_status});
                         const result = response.data;
-                        // brawser consolida korish uchun//
-                         console.log("response:", response);
-                         console.log("url", url); 
-                        console.log("result:", result);
 
                         if(result.state == "success"){
                             alert("success");
@@ -204,7 +197,6 @@
 
             });
             
-            // validationni tekshirish va biror malumot kiritilmagan bolsa alert beradi//
             function validateForm(){
             const restaurant_mb_id = $(".restaurant_mb_id").val(),
                 product_name = $(".product_name").val(),
@@ -223,22 +215,19 @@
                 product_collection  == "" ||
                 product_status == ""
             ){
-                alert("Iltimos, hamma ma'lumotlarni kiriting!");
+                alert("fill in all");
                 return false;
             }else{
                 return true;
             }
         }
-        // fileni yukshash va turini tekshirib qabul qilishi va //
-        //fileReader orqali fileni preleading qilib beradi//
         function previewFileHandler(input, order){
-            // console.log(input);
             const image_class_name = input.className;
             const file = $(`.${image_class_name}`)[0].files[0],
                 fileType = file.type,
                 validImageTypes = ["image/jpg", "image/jpeg", "image/png"];
             if(!validImageTypes.includes(fileType)){
-                alert('Iltimos ruhsat etilgan formatdagi rasmlarni yuklang: jpg, jpeg, png');
+                alert('Please Enter only in this file: jpg, jpeg, png');
             }else{
                 if(file){
                     let reader = new FileReader();

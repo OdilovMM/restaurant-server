@@ -40,7 +40,6 @@ class Restaurant {
       aggregationQuery.push({ $skip: (data.page - 1) * data.limit });
       aggregationQuery.push({ $limit: data.limit });
 
-      //  check auth member liked the chosen target
       aggregationQuery.push(lookup_auth_member_liked(auth_mb_id));
 
       const result = await this.memberModel.aggregate(aggregationQuery).exec();
@@ -67,7 +66,6 @@ class Restaurant {
         .exec();
       assert.ok(result, Definer.general_err1);
 
-      //todo: increase view if member has not seen the target before
       return result;
     } catch (err) {
       throw err;
@@ -81,7 +79,6 @@ class Restaurant {
           mb_type: "RESTAURANT",
         })
         .exec();
-      //   console.log(result);
       assert.ok(result, Definer.general_err1);
       return result;
     } catch (err) {
@@ -99,7 +96,6 @@ class Restaurant {
           returnDocument: "after",
         })
         .exec();
-      //   console.log(result);
       assert.ok(result, Definer.general_err1);
       return result;
     } catch (err) {

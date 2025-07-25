@@ -40,8 +40,6 @@ class Product {
         ])
         .exec();
 
-      console.log("result::", result);
-
       assert.ok(result, Definer.general_err1);
       return result;
     } catch (err) {
@@ -81,7 +79,6 @@ class Product {
         restaurant_mb_id: member._id,
       });
       assert.ok(result, Definer.general_err1);
-      // console.log("result", result);
       return result;
     } catch (err) {
       throw err;
@@ -91,10 +88,8 @@ class Product {
   async addNewProductData(data, member) {
     try {
       data.restaurant_mb_id = shapeIntoMongooseObjectId(member._id);
-
       const new_product = new this.productModel(data);
       const result = await new_product.save();
-
       assert.ok(result, Definer.product_err1);
       return result;
     } catch (err) {

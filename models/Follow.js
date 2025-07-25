@@ -48,7 +48,6 @@ class Follow {
 
       return await new_follow.save();
     } catch (mongo_err) {
-      console.log(mongo_err);
       throw new Error(Definer.follow_err2);
     }
   }
@@ -86,7 +85,6 @@ class Follow {
           subscriber_id: subscriber_id,
         })
         .exec();
-      console.log("result:::", result);
       assert.ok(result, Definer.general_err1);
 
       await this.modifyMemberFollowCount(follow_id, "subscriber_change", -1);
@@ -148,9 +146,7 @@ class Follow {
         },
         { $unwind: "$subscriber_member_data" },
       ];
-      // following followed back to subscriber
       if (member && member._id === inquiry.mb_id) {
-        console.log("Passed");
         aggregateQuery.push(lookup_auth_member_following(follow_id, "follows"));
       }
 
